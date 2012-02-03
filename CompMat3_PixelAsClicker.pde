@@ -1,7 +1,7 @@
 ArrayList<Pixel> allPixels;
 Pixel p;
 
-int pixelSize = 40;
+int pixelSize = 30;
 int waitTime = 10;
 
 float increment = 0.01;
@@ -14,7 +14,7 @@ float numOfRows, numOfCols;
 
 void setup() {
   size (800, 600);
-  //frameRate(30);
+  frameRate(30);
   noStroke();
   smooth();
   colorMode(HSB, 255);
@@ -30,8 +30,8 @@ void setup() {
     float yoff = 0.0;
     for (int currentCol = 0; currentCol < (width/pixelSize); currentCol++) {
       yoff += increment;
-      int currentSprite = currentCol;
-      //int currentSprite = currentCol - currentRow;
+      //int currentSprite = currentCol;
+      int currentSprite = currentCol - currentRow;
       if (currentSprite >= (pixelSize + waitTime)) currentSprite = currentSprite % (pixelSize + waitTime);
       p = new Pixel(currentCol*pixelSize, currentRow*pixelSize, currentSprite, int(noise(xoff, yoff, zoff)*255));
       allPixels.add(p);
