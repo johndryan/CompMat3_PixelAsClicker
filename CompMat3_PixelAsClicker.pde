@@ -2,7 +2,7 @@ ArrayList<Pixel> allPixels;
 Pixel p;
 
 int pixelSize = 40;
-int waitTime = 40;
+int waitTime = 10;
 
 float increment = 0.01;
 float zoff = 0.0;
@@ -19,14 +19,21 @@ void setup() {
   smooth();
   colorMode(HSB, 255);
   
+  noiseDetail(8,0.65f);
+  
   allPixels = new ArrayList<Pixel>();
 
+  float xoff = 0.0; // Start xoff at 0
+
   for (int currentRow = 0; currentRow < (height/pixelSize); currentRow++) {
+    xoff += increment;
+    float yoff = 0.0;
     for (int currentCol = 0; currentCol < (width/pixelSize); currentCol++) {
+      yoff += increment;
       int currentSprite = currentCol;
       //int currentSprite = currentCol - currentRow;
       if (currentSprite >= (pixelSize + waitTime)) currentSprite = currentSprite % (pixelSize + waitTime);
-      p = new Pixel(currentCol*pixelSize, currentRow*pixelSize, currentSprite);
+      p = new Pixel(currentCol*pixelSize, currentRow*pixelSize, currentSprite, int(noise(xoff, yoff, zoff)*255));
       allPixels.add(p);
     }
   }
@@ -42,21 +49,5 @@ void draw() {
     p.display();
   }
   
-  /*noiseDetail(8,0.65f);
-  float xoff = 0.0; // Start xoff at 0
-  for (int currentRow = 0; currentRow < numOfRows; currentRow++) {
-    xoff += increment;
-    float yoff = 0.0;
-    for (int currentCol = 0; currentCol < numOfCols; currentCol++) {
-      yoff += increment;
-      // Calculate noise and scale by pixelSize
-      int spriteFrame = int(noise(xoff, yoff, zoff)*127);
-      if (spriteFrame >= pixelSize) spriteFrame = pixelSize-1;
-      int xPos = (currentCol*pixelWidth)-(pixelWidth/2);
-      int yPos = (currentRow*(pixelHeight-5))-(pixelHeight/2);
-      image(images[spriteFrame], xPos, yPos);
-      //println(currentRow + "," + currentCol + "  =  " + spriteFrame);
-    }
-  }
-  zoff += zincrement;*/
+  zoff += zincrement;
 }

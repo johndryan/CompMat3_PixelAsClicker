@@ -1,10 +1,10 @@
 class Pixel {
   int x, y, newColor, oldColor, spriteFrame;
-  Pixel(int x, int y, int spriteFrame) {
+  Pixel(int x, int y, int spriteFrame, int newColor) {
     this.x = x;
     this.y = y;
-    this.newColor = int(random(255));
-    this.oldColor = int(random(255));
+    this.newColor = newColor;
+    this.oldColor = 0;
     this.spriteFrame = spriteFrame;
   }
 
@@ -12,8 +12,10 @@ class Pixel {
     spriteFrame++;
     if (spriteFrame >= (pixelSize + waitTime)) {
       spriteFrame = 0;
+      float xoff = increment * (x/pixelSize);
+      float yoff = increment * (y/pixelSize);
       oldColor = newColor;
-      newColor = int(random(255));
+      newColor = int(noise(xoff, yoff, zoff)*255);
     }
   }
   
