@@ -1,57 +1,62 @@
+ArrayList<Pixel> allPixels;
+Pixel p;
+
 int pixelSize = 40;
 int waitTime = 40;
 
+float increment = 0.01;
+float zoff = 0.0;
+float zincrement = 0.01; 
+
+int currentframe = 0;
 int spriteFrame = 0;
-int newColor, oldColor;
+float numOfRows, numOfCols;
 
 void setup() {
   size (800, 600);
+  //frameRate(30);
   noStroke();
   smooth();
   colorMode(HSB, 255);
+  
+  allPixels = new ArrayList<Pixel>();
 
-  newColor = int(random(255));
-  oldColor = int(random(255));
+  for (int currentRow = 0; currentRow < (height/pixelSize); currentRow++) {
+    for (int currentCol = 0; currentCol < (width/pixelSize); currentCol++) {
+      int currentSprite = currentCol;
+      //int currentSprite = currentCol - currentRow;
+      if (currentSprite >= (pixelSize + waitTime)) currentSprite = currentSprite % (pixelSize + waitTime);
+      p = new Pixel(currentCol*pixelSize, currentRow*pixelSize, currentSprite);
+      allPixels.add(p);
+    }
+  }
 }
 
 void draw() {
-  for (int currentRow = 0; currentRow < (height/pixelSize); currentRow++) {
-    for (int currentCol = 0; currentCol < (width/pixelSize); currentCol++) {
-      int currentSprite = spriteFrame + currentCol;
-      if (currentSprite >= (pixelSize + waitTime)) currentSprite = pixelSize;
-      drawPixel(currentCol*pixelSize, currentRow*pixelSize, currentSprite);
-    }
+  //background(163, 120, 196);
+  background(0);
+  
+  for (int i=0; i<allPixels.size(); i++) {
+    Pixel p = allPixels.get(i);
+    p.update();
+    p.display();
   }
   
-  spriteFrame++;
-  if (spriteFrame >= (pixelSize + waitTime)) {
-    spriteFrame = 0;
-    oldColor = newColor;
-    newColor = int(random(255));
+  /*noiseDetail(8,0.65f);
+  float xoff = 0.0; // Start xoff at 0
+  for (int currentRow = 0; currentRow < numOfRows; currentRow++) {
+    xoff += increment;
+    float yoff = 0.0;
+    for (int currentCol = 0; currentCol < numOfCols; currentCol++) {
+      yoff += increment;
+      // Calculate noise and scale by pixelSize
+      int spriteFrame = int(noise(xoff, yoff, zoff)*127);
+      if (spriteFrame >= pixelSize) spriteFrame = pixelSize-1;
+      int xPos = (currentCol*pixelWidth)-(pixelWidth/2);
+      int yPos = (currentRow*(pixelHeight-5))-(pixelHeight/2);
+      image(images[spriteFrame], xPos, yPos);
+      //println(currentRow + "," + currentCol + "  =  " + spriteFrame);
+    }
   }
-}
-
-void drawPixel(int xVal, int yVal, int spriteFrame) {
-  float brightFactor = spriteFrame % (pixelSize/2);
-  brightFactor *= 127/(pixelSize/2);
-  if (spriteFrame < (pixelSize/2)) {
-    fill(oldColor, 255, 127);
-    rect(xVal, yVal, pixelSize, pixelSize);
-    fill(newColor, 255, 127);
-    triangle(xVal, yVal, xVal + pixelSize, yVal, xVal + pixelSize, yVal + pixelSize);
-    fill(oldColor, 255, brightFactor+127);
-    if (xVal == 0 && yVal == 0) println(spriteFrame + " [A] == " + brightFactor);
-    triangle(xVal, yVal, xVal + pixelSize - spriteFrame, yVal + spriteFrame, xVal + pixelSize, yVal + pixelSize);
-  } else if (spriteFrame < pixelSize) {
-    fill(newColor, 255, 127);
-    rect(xVal, yVal, pixelSize, pixelSize);
-    fill(oldColor, 255, 127);
-    triangle(xVal, yVal, xVal, yVal + pixelSize, xVal + pixelSize, yVal + pixelSize);
-    fill(newColor, 255, brightFactor+12);
-    if (xVal == 0 && yVal == 0) println(spriteFrame + " [B] == " + brightFactor);
-    triangle(xVal, yVal, xVal + pixelSize - spriteFrame, yVal + spriteFrame, xVal + pixelSize, yVal + pixelSize);
-  } else {
-    fill(newColor, 255, 127);
-    rect(xVal, yVal, pixelSize, pixelSize);
-  }
+  zoff += zincrement;*/
 }
